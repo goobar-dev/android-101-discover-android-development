@@ -1,4 +1,4 @@
-# <course title>
+# Discover Android Development
 This course will expose students to the fundamentals of modern Android development with Kotlin.
 
 This training is designed to be done over 1 day with a mixture of lectures and labs.
