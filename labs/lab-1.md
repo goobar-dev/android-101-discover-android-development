@@ -1,4 +1,4 @@
-# 🖥 Lab 0: Setting Up Your Android Development Environment
+# 🖥 Lab 1: Setting Up Your Android Development Environment
 In this lab, you'll install Android Studio, and setup your Android development environment so you're ready to build your first Android app.
 
 ## Objectives
