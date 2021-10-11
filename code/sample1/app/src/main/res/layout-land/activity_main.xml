@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context=".MainActivity"
+    >
+  <TextView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:text="Add Two Values"
+      android:textAlignment="center"
+      style="@style/TextAppearance.AppCompat.Display1"
+      android:layout_marginBottom="32dp"
+      />
+
+  <LinearLayout
+      android:orientation="vertical"
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="1"
+      android:gravity="center"
+    >
+    <EditText
+        android:id="@+id/value1Field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter value 1"
+        android:inputType="number"
+        />
+
+    <EditText
+        android:id="@+id/value2Field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter value 2"
+        android:inputType="number"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/resultButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="See Result"
+        android:layout_marginTop="24dp"
+        />
+  </LinearLayout>
+</LinearLayout>
