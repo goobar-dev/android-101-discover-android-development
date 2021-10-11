@@ -17,3 +17,4 @@ In this lab, you'll explore configuration changes by providing a custom layout f
 - Adjust the `LinearLayout` to use _landscape_ orientation rather than the default _portrait_
     - Be sure to keep the ids of our Views the same
 - Deploy your app to your emulator and observe how the UI changes when the orientation changes
+- Replace hardcoded strings in your XML files with string resources within `res/values/strings.xml`
