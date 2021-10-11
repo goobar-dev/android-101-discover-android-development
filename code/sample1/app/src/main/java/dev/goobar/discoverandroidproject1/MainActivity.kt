@@ -2,6 +2,7 @@ package dev.goobar.discoverandroidproject1
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -9,8 +10,12 @@ import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
+
+  private val TAG = MainActivity::class.simpleName
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    Log.d(TAG, "onCreate()")
     setContentView(R.layout.activity_main)
 
     val root: View = findViewById(R.id.root)
@@ -24,7 +29,33 @@ class MainActivity : AppCompatActivity() {
       val result = value1 + value2
 
       val msg = "$value1 + $value2 = $result"
-      Snackbar.make(this, root, msg, Snackbar.LENGTH_SHORT).show()
+
+      startActivity(ResultActivity.createIntent(this, value1, value2, result))
     }
+  }
+
+  override fun onStart() {
+    super.onStart()
+    Log.d(TAG, "onStart()")
+  }
+
+  override fun onRestart() {
+    super.onRestart()
+    Log.d(TAG, "onResume()")
+  }
+
+  override fun onPause() {
+    super.onPause()
+    Log.d(TAG, "onPause()")
+  }
+
+  override fun onStop() {
+    super.onStop()
+    Log.d(TAG, "onStop()")
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    Log.d(TAG, "onDestroy()")
   }
 }
