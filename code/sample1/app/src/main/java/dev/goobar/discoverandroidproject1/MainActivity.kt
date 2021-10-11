@@ -28,8 +28,6 @@ class MainActivity : AppCompatActivity() {
       val value2 = field2.text.toString().toInt()
       val result = value1 + value2
 
-      val msg = "$value1 + $value2 = $result"
-
       startActivity(ResultActivity.createIntent(this, value1, value2, result))
     }
   }
@@ -39,8 +37,8 @@ class MainActivity : AppCompatActivity() {
     Log.d(TAG, "onStart()")
   }
 
-  override fun onRestart() {
-    super.onRestart()
+  override fun onResume() {
+    super.onResume()
     Log.d(TAG, "onResume()")
   }
 

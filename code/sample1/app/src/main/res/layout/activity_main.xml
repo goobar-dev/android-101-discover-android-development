@@ -13,7 +13,7 @@
   <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Add Two Values"
+      android:text="@string/title_add_two_values"
       style="@style/TextAppearance.AppCompat.Display1"
       android:layout_marginBottom="32dp"
       />
@@ -22,7 +22,7 @@
       android:id="@+id/value1Field"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:hint="Enter value 1"
+      android:hint="@string/hint_enter_value_1"
       android:inputType="number"
       />
 
@@ -30,7 +30,7 @@
       android:id="@+id/value2Field"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:hint="Enter value 1"
+      android:hint="@string/hint_enter_value_2"
       android:inputType="number"
       />
 
@@ -38,7 +38,7 @@
       android:id="@+id/resultButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="See Result"
+      android:text="@string/button_see_result"
       android:layout_marginTop="24dp"
       />
 

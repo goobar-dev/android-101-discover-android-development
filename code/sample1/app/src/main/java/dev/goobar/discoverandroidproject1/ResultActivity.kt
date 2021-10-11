@@ -18,7 +18,8 @@ class ResultActivity : AppCompatActivity() {
     val result = extras.getInt(EXTRA_RESULT)
 
     val resultText: TextView = findViewById(R.id.resultText)
-    resultText.text = "$value1 + $value2 = $result"
+    val msg = getString(R.string.feedback_result, value1, value2, result)
+    resultText.text = msg
   }
 
   companion object {

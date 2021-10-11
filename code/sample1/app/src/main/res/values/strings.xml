@@ -1,3 +1,9 @@
 <resources>
-  <string name="app_name">Discover Android Project 1</string>
+  <string name="app_name">Simple Calculator</string>
+
+  <string name="title_add_two_values">Add Two Values</string>
+  <string name="hint_enter_value_1">Enter value 1</string>
+  <string name="hint_enter_value_2">Enter value 2</string>
+  <string name="button_see_result">See Result</string>
+  <string name="feedback_result">%1$d + %2$d = %3$d</string>
 </resources>
