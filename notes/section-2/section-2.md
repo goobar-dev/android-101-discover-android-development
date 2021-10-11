@@ -13,3 +13,7 @@
 - [Build a simple user interface in Android Studio](https://developer.android.com/training/basics/firstapp/building-ui)
 - [Declaring layouts in Android Studio](https://developer.android.com/guide/topics/ui/declaring-layout)
 - [Run your Android app in an emulator](https://developer.android.com/studio/run/emulator#run-emulator-studio)
+- [Referencing XML Views from code using `findViewById()`](https://developer.android.com/reference/android/view/View#ids)
+- [Display feedback using Toasts](https://developer.android.com/guide/topics/ui/notifiers/toasts)
+- [Display feedback using Snackbars](https://developer.android.com/reference/com/google/android/material/snackbar/Snackbar)
+- [Material Design guidance for Snackbars](https://material.io/components/snackbars/android)

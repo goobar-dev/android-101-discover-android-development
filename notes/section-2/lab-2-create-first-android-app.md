@@ -2,7 +2,10 @@
 In this lab, you'll create your first Android project in Android Studio and run it on a virtual device
 
 ## Objectives
-- Install Android Studio
-- Use the Android SDK Manager to install the latest Android SDK
-- Use AVD to create a new Android emulator
-- Prepare a device for app debugging
+- Create a new Android Studio project
+- Deploy your project to a device or emulator
+- Build a simple addition calculator
+    - Add 2 `EditText` to accept input from the user
+    - Add 1 `Button` to calculate the sum of the two entered values
+    - When the button is clicked, display a `Toast` that displays the summation of the two entered values
+    - Replace the `Toast` with a `Snackbar`
