@@ -1,7 +1,6 @@
 package dev.goobar.discoverandroidproject2
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +30,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -43,51 +43,95 @@ import androidx.compose.ui.text.input.KeyboardType.Companion
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
+import dev.goobar.discoverandroidproject2.api.ForecastResponse
+import dev.goobar.discoverandroidproject2.api.GeocodeResponse
+import dev.goobar.discoverandroidproject2.api.WeatherService
 import dev.goobar.discoverandroidproject2.data.CurrentForecast
 import dev.goobar.discoverandroidproject2.data.DailyForecast
+import dev.goobar.discoverandroidproject2.data.UiState
 import dev.goobar.discoverandroidproject2.ui.theme.DiscoverAndroidProject2Theme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Retrofit.Builder
+import retrofit2.converter.moshi.MoshiConverterFactory
 import java.text.SimpleDateFormat
 import java.util.Date
 
-private val SAMPLE_CURRENT_FORECAST = CurrentForecast("Seattle", "Sunny", 51.3f, 42.1f)
-
-private val SAMPLE_FORECAST = listOf(
-  DailyForecast(43.4f, 32.2f, "Cloudy", 0L),
-  DailyForecast(53.4f, 32.2f, "Sunny", 0L),
-  DailyForecast(51.4f, 42.2f, "Sunny", 0L),
-  DailyForecast(41.4f, 36.2f, "Rain", 0L),
-  DailyForecast(43.4f, 32.2f, "Cloudy", 0L),
-  DailyForecast(40.4f, 32.2f, "Rain", 0L),
-  DailyForecast(49.4f, 32.2f, "Sunny", 0L),
-)
-
 class MainActivity : ComponentActivity() {
+  private var retrofit = Builder()
+    .baseUrl("http://api.openweathermap.org/")
+    .addConverterFactory(MoshiConverterFactory.create())
+    .build()
+
+  private var service: WeatherService = retrofit.create(WeatherService::class.java)
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
     setContent {
+      val uiState = remember { mutableStateOf(UiState())}
+
       DiscoverAndroidProject2Theme {
-        SearchScreen()
+        SearchScreen(uiState.value) { zipcode ->
+          searchForWeather(zipcode, uiState)
+        }
+      }
+    }
+  }
+
+  private fun searchForWeather(zipcode: String, uiState: MutableState<UiState>) {
+    lifecycleScope.launch(Dispatchers.IO) {
+      val geocodeResponse = service.geocode(zipcode, "04bd94947f2731939baea95f2b059310")
+      val forecastResponse = service.forecast(geocodeResponse.lat, geocodeResponse.lon, "04bd94947f2731939baea95f2b059310")
+
+      uiState.value = createUiState(geocodeResponse, forecastResponse)
+    }
+  }
+
+  private fun createUiState(geocodeResponse: GeocodeResponse, forecastResponse: ForecastResponse): UiState {
+    return UiState(
+      currentForecast = CurrentForecast(
+        location = geocodeResponse.name,
+        description = forecastResponse.current.weather[0].description,
+        temp = "${forecastResponse.current.temp.toString()}°"
+      ),
+      weeklyForecast = forecastResponse.daily.map { dailyForecastResponse ->
+        DailyForecast(
+          high = dailyForecastResponse.temp.max,
+          low = dailyForecastResponse.temp.min,
+          dailyForecastResponse.weather[0].description,
+          timestamp = dailyForecastResponse.dt * 1000
+        )
+      }
+    )
+  }
+}
+
+@Composable
+fun SearchScreen(
+  state: UiState,
+  onSearch: (String) -> Unit) {
+  Scaffold(
+    topBar = { SearchAppBar(onSearch) }
+  ) {
+    Column {
+      if (state.currentForecast != null) {
+        CurrentForecast(state.currentForecast)
+      }
+      if (state.weeklyForecast != null) {
+        ForecastList(state.weeklyForecast)
       }
     }
   }
 }
 
 @Composable
-fun SearchScreen() {
-  Scaffold(
-    topBar = { SearchAppBar() }
-  ) {
-    Column {
-      CurrentForecast(SAMPLE_CURRENT_FORECAST)
-      ForecastList(forecast = SAMPLE_FORECAST)
-    }
-  }
-}
-
-@Composable
-fun SearchAppBar() {
+fun SearchAppBar(
+  onSearch: (String) -> Unit
+) {
   val zipcode = remember { mutableStateOf(TextFieldValue()) }
-  val context = LocalContext.current
 
   TopAppBar(
     elevation = 4.dp,
@@ -100,9 +144,7 @@ fun SearchAppBar() {
         keyboardType = KeyboardType.Number,
         imeAction = ImeAction.Search
       ),
-      keyboardActions = KeyboardActions {
-              Toast.makeText(context, "Searched for ${zipcode.value.text}", Toast.LENGTH_SHORT ).show()
-      },
+      keyboardActions = KeyboardActions { onSearch(zipcode.value.text) },
       leadingIcon = {
         Icon(Icons.Rounded.Search, "search")
       },
@@ -132,11 +174,10 @@ fun ColumnScope.CurrentForecast(currentForecast: CurrentForecast) {
       .weight(1f)
       .padding(24.dp)
   ) {
-    Text(currentForecast.location, style = MaterialTheme.typography.h1)
+    Text(currentForecast.location, style = MaterialTheme.typography.h2)
     Text(currentForecast.description, style = MaterialTheme.typography.h4)
     Spacer(modifier = Modifier.height(20.dp))
-    Text(currentForecast.high.toString(), style = MaterialTheme.typography.h5)
-    Text(currentForecast.low.toString(), style = MaterialTheme.typography.h5)
+    Text(currentForecast.temp, style = MaterialTheme.typography.h5)
   }
 }
 
@@ -174,6 +215,8 @@ fun ColumnScope.ForecastList(forecast: List<DailyForecast>) {
 @Composable
 fun DefaultPreview() {
   DiscoverAndroidProject2Theme {
-    SearchScreen()
+    SearchScreen(UiState()) {
+
+    }
   }
 }
