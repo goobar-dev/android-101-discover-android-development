@@ -2,7 +2,8 @@ package dev.goobar.discoverandroidproject2.api
 
 data class WeatherResponse(
   val main: String,
-  val description: String
+  val description: String,
+  val icon: String
 )
 data class CurrentWeatherResponse(
   val dt: Long,
